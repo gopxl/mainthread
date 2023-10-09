@@ -1,8 +1,8 @@
-# mainthread [![GoDoc](https://godoc.org/github.com/faiface/mainthread?status.svg)](http://godoc.org/github.com/faiface/mainthread) [![Report card](https://goreportcard.com/badge/github.com/faiface/mainthread)](https://goreportcard.com/report/github.com/faiface/mainthread)
+# mainthread [![GoDoc](https://godoc.org/github.com/gopxl/mainthread?status.svg)](http://godoc.org/github.com/gopxl/mainthread) [![Report card](https://goreportcard.com/badge/github.com/gopxl/mainthread)](https://goreportcard.com/report/github.com/gopxl/mainthread)
 
 Package mainthread allows you to run code on the main operating system thread.
 
-`go get github.com/faiface/mainthread`
+`go get github.com/gopxl/mainthread`
 
 Operating systems often require, that code which deals with windows and graphics has to run on the
 main thread. This is however somehow challenging in Go due to Go's concurrent nature.
@@ -18,7 +18,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/faiface/mainthread"
+	"github.com/gopxl/mainthread"
 )
 
 func run() {

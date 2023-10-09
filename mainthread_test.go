@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/faiface/mainthread"
+	"github.com/goxpl/mainthread"
 )
 
 func BenchmarkCall(b *testing.B) {
