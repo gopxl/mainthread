@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/gopxl/mainthread"
+	"github.com/gopxl/mainthread/v2"
 )
 
 func BenchmarkCall(b *testing.B) {
