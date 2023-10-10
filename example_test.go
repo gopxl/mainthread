@@ -3,7 +3,7 @@ package mainthread_test
 import (
 	"fmt"
 
-	"github.com/gopxl/mainthread"
+	"github.com/gopxl/mainthread/v2"
 )
 
 func run() {
