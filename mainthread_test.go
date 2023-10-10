@@ -33,7 +33,7 @@ func BenchmarkCallErr(b *testing.B) {
 
 func BenchmarkCallVal(b *testing.B) {
 	run := func() {
-		f := func() interface{} {
+		f := func() int {
 			return 42
 		}
 		b.ResetTimer()
