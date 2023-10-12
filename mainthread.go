@@ -13,6 +13,7 @@ var CallQueueCap = 16
 
 var (
 	callQueue chan func()
+	donePool  chan chan any
 )
 
 func init() {
@@ -25,12 +26,21 @@ func checkRun() {
 	}
 }
 
+func returnDone(done chan any) {
+	donePool <- done
+}
+
 // Run enables mainthread package functionality. To use mainthread package, put your main function
 // code into the run function (the argument to Run) and simply call Run from the real main function.
 //
 // Run returns when run (argument) function finishes.
 func Run(run func()) {
 	callQueue = make(chan func(), CallQueueCap)
+
+	donePool = make(chan chan any, CallQueueCap)
+	for i := 0; i < CallQueueCap; i++ {
+		donePool <- make(chan any)
+	}
 
 	done := make(chan struct{})
 	go func() {
@@ -58,7 +68,8 @@ func CallNonBlock(f func()) {
 // Call queues function f on the main thread and blocks until the function f finishes.
 func Call(f func()) {
 	checkRun()
-	done := make(chan struct{})
+	done := <-donePool
+	defer returnDone(done)
 	callQueue <- func() {
 		f()
 		done <- struct{}{}
@@ -68,20 +79,16 @@ func Call(f func()) {
 
 // CallErr queues function f on the main thread and returns an error returned by f.
 func CallErr(f func() error) error {
-	checkRun()
-	errChan := make(chan error)
-	callQueue <- func() {
-		errChan <- f()
-	}
-	return <-errChan
+	return CallVal(f)
 }
 
 // CallVal queues function f on the main thread and returns a value returned by f.
 func CallVal[T any](f func() T) T {
 	checkRun()
-	respChan := make(chan T)
+	respChan := <-donePool
+	defer returnDone(respChan)
 	callQueue <- func() {
 		respChan <- f()
 	}
-	return <-respChan
+	return (<-respChan).(T)
 }
