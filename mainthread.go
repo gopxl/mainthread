@@ -83,12 +83,16 @@ func CallErr(f func() error) error {
 }
 
 // CallVal queues function f on the main thread and returns a value returned by f.
-func CallVal[T any](f func() T) T {
+func CallVal[T any](f func() T) (t T) {
 	checkRun()
 	respChan := <-donePool
 	defer returnDone(respChan)
 	callQueue <- func() {
 		respChan <- f()
 	}
-	return (<-respChan).(T)
+	v := <-respChan
+	if v != nil {
+		return v.(T)
+	}
+	return
 }
