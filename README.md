@@ -2,7 +2,7 @@
 
 Package mainthread allows you to run code on the main operating system thread.
 
-`go get github.com/gopxl/mainthread`
+`go get github.com/gopxl/mainthread/v2`
 
 Operating systems often require, that code which deals with windows and graphics has to run on the
 main thread. This is however somehow challenging in Go due to Go's concurrent nature.
@@ -18,7 +18,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/gopxl/mainthread"
+	"github.com/gopxl/mainthread/v2"
 )
 
 func run() {
