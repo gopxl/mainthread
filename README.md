@@ -69,3 +69,19 @@ mainthread.Call(func() {
 ```
 
 However, be careful with `mainthread.CallNonBlock` when dealing with local variables.
+
+## WebAssembly (`GOOS=js GOARCH=wasm`)
+
+A parallel implementation ships under the `js && wasm` build tag. Go programs
+compiled for the browser run as a single JavaScript event-loop thread, so
+there is no separate main thread to queue onto — and blocking the event loop
+deadlocks `requestAnimationFrame`. The WASM build therefore:
+
+- runs `Run`, `Call`, `CallErr`, and `CallVal` inline on the calling goroutine,
+- spawns a goroutine for `CallNonBlock` so the caller still returns without
+  waiting, and
+- exports `CallQueueCap` only for source compatibility; it is unused.
+
+Downstream libraries that need to differ for WASM (for example, to avoid using
+finalizers that post to the queue) can gate on the same `js && wasm` build
+tag.
